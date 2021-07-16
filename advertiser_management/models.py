@@ -1,48 +1,46 @@
 from django.db import models
+from django.db.models import Sum
 
-
-class BaseAdvertising:
+class BaseAdvertising(models.Model):
 	"""docstring for BaseAdvertising"""
-	_id = 0
-	_clicks = 0
-	_views = 0
-	
-	def __init__(self):
-		super(BaseAdvertising, self).__init__()
+	clicks = models.IntegerField()
+	views = models.IntegerField()
 
-	def getId():
-		return self._id
-	def setId(self, _id_):
-		self._id = _id_
+	def __init__(self,  clicks = 0, views = 0):
+		super(BaseAdvertising, self).__init__()
+		self.clicks = clicks
+		self.views = views
+
+	# def getId():
+	# 	return self._id
+	# def setId(self, _id_):
+	# 	self._id = _id_
 	def getClicks(self):
-		return self._clicks
+		return self.clicks
 	def getViews(self):
-		return self._views
+		return self.views
 	def incClicks(self):
-		self._clicks += 1
+		self.clicks += 1
 	def incViews(self):
-		self._views += 1
+		self.views += 1
 	def describeMe(self):
 		return "BaseAdvertising: Class for basic functions needed for advertising"
 
 
-class Advertiser(BaseAdvertising):
+class Advertiser(BaseAdvertising, models.Model):
 	"""docstring for Advertiser"""
-	_name = ""
-	_totalclicks = 0
+	name = models.CharField(max_length = 100)
 
-	def __init__(self, _id, name, clicks = 0, views = 0):
+	def __init__(self, name, clicks = 0, views = 0):
 		super(Advertiser, self).__init__()
-		self._id = _id
-		self._name = name
-		self._clicks = clicks
-		self._views = views
-		Advertiser._totalclicks += clicks
+		self.name = name
+		self.clicks = clicks
+		self.views = views
 
 	def getName(self):
-		return self._name
+		return self.name
 	def setName(self, name):
-		self._name = name
+		self.name = name
 
 	@staticmethod
 	def help():
@@ -50,42 +48,40 @@ class Advertiser(BaseAdvertising):
 
 	@staticmethod
 	def getTotalClicks():
-		return Advertiser._totalclicks
+		return ItemPrice.objects.aggregate(Sum('price'))
 
 	def incClicks(self):
-		self._clicks += 1
-		Advertiser._totalclicks += 1
+		self.clicks += 1
 
 	def describeMe(self):
 		return "Advertiser: Class containing advertiser info and functions needed for each advertiser"
 
 
 
-class Ad(BaseAdvertising):
+class Ad(BaseAdvertising, models.Model):
 	"""docstring for Ad"""
-	_title = ""
-	_imgURL = ""
-	_link = ""
-	_theAdveriser = None
+	title =  models.CharField(max_length = 100)
+	imgURL =  models.CharField(max_length = 100)
+	link =  models.CharField(max_length = 100)
+	theAdvertiser = models.ForeignKey(Advertiser, on_delete = models.CASCADE)
 
-	def __init__(self, _id, title, imgURL, link, theAdvertiser, clicks = 0, views = 0):
+	def __init__(self, title, imgURL, link, theAdvertiser, clicks = 0, views = 0):
 		super(Ad, self).__init__()
-		self._id = _id
-		self._title = title
-		self._clicks = clicks
-		self._views = views
-		self._imgURL = imgURL
-		self._link = link
-		self._theAdveriser = theAdvertiser
+		self.title = title
+		self.clicks = clicks
+		self.views = views
+		self.imgURL = imgURL
+		self.link = link
+		self.theAdvertiser = theAdvertiser
 
 	def getTitle(self):
-		return self._title
+		return self.title
 	def setTitle(self, title):
-		self._title = title
+		self.title = title
 
 	def incClicks(self):
-		self._clicks += 1
-		self._theAdveriser.incClicks()
+		self.clicks += 1
+		self.theAdvertiser.incClicks()
 
 	def describeMe(self):
 		return "Ad: Class containing ad info and functions needed for each ad"
