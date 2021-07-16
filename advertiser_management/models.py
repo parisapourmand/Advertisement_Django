@@ -4,12 +4,7 @@ from django.db.models import Sum
 class BaseAdvertising(models.Model):
 	"""docstring for BaseAdvertising"""
 	clicks = models.IntegerField()
-	views = models.IntegerField()
-
-	def __init__(self,  clicks = 0, views = 0):
-		super(BaseAdvertising, self).__init__()
-		self.clicks = clicks
-		self.views = views
+	views = models.IntegerField()	
 
 	# def getId():
 	# 	return self._id
@@ -26,16 +21,9 @@ class BaseAdvertising(models.Model):
 	def describeMe(self):
 		return "BaseAdvertising: Class for basic functions needed for advertising"
 
-
 class Advertiser(BaseAdvertising, models.Model):
 	"""docstring for Advertiser"""
 	name = models.CharField(max_length = 100)
-
-	def __init__(self, name, clicks = 0, views = 0):
-		super(Advertiser, self).__init__()
-		self.name = name
-		self.clicks = clicks
-		self.views = views
 
 	def getName(self):
 		return self.name
@@ -64,15 +52,6 @@ class Ad(BaseAdvertising, models.Model):
 	imgURL =  models.CharField(max_length = 100)
 	link =  models.CharField(max_length = 100)
 	theAdvertiser = models.ForeignKey(Advertiser, on_delete = models.CASCADE)
-
-	def __init__(self, title, imgURL, link, theAdvertiser, clicks = 0, views = 0):
-		super(Ad, self).__init__()
-		self.title = title
-		self.clicks = clicks
-		self.views = views
-		self.imgURL = imgURL
-		self.link = link
-		self.theAdvertiser = theAdvertiser
 
 	def getTitle(self):
 		return self.title
