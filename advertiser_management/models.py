@@ -6,8 +6,7 @@ class BaseAdvertising:
 	_id = 0
 	_clicks = 0
 	_views = 0
-
-
+	
 	def __init__(self):
 		super(BaseAdvertising, self).__init__()
 
