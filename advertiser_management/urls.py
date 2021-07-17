@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+
+app_name = 'advertiser_management'
 urlpatterns = [
-    path('', views.show_ads, name='advertiserManagement-ads'),
+    path('', views.HomeView.as_view(), name='advertiserManagement-home'),
 ]
