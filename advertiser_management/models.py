@@ -1,67 +1,76 @@
 from django.db import models
 from django.db.models import Sum
 
-class BaseAdvertising(models.Model):
-	"""docstring for BaseAdvertising"""
-	clicks = models.IntegerField(default = 0)
-	views = models.IntegerField(default = 0)	
 
-	# def getId():
-	# 	return self._id
-	# def setId(self, _id_):
-	# 	self._id = _id_
-	def getClicks(self):
-		return self.clicks
-	def getViews(self):
-		return self.views
-	def incClicks(self):
-		self.clicks += 1
-	def incViews(self):
-		self.views += 1
-	def describeMe(self):
-		return "BaseAdvertising: Class for basic functions needed for advertising"
+class BaseAdvertising(models.Model):
+    """docstring for BaseAdvertising"""
+    clicks = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
+
+    def get_clicks(self):
+        return self.clicks
+
+    def get_views(self):
+        return self.views
+
+    def inc_clicks(self):
+        self.clicks += 1
+
+    def inc_views(self):
+        self.views += 1
+
+    def describe_me(self):
+        return "BaseAdvertising: Class for basic functions needed for advertising"
+
 
 class Advertiser(BaseAdvertising, models.Model):
-	"""docstring for Advertiser"""
-	name = models.CharField(max_length = 100)
+    """docstring for Advertiser"""
+    name = models.CharField(max_length=100)
 
-	def getName(self):
-		return self.name
-	def setName(self, name):
-		self.name = name
+    def __str__(self):
+        return self.name
 
-	@staticmethod
-	def help():
-		return "Help: id is the Advertiser id, name is the Advertiser name, clicks and views are the number of clicks and views of this Advertisers ads. The field total clicks is the sum of all Advertisers clicks."
+    def get_name(self):
+        return self.name
 
-	@staticmethod
-	def getTotalClicks():
-		return ItemPrice.objects.aggregate(Sum('price'))
+    def set_name(self, name):
+        self.name = name
 
-	def incClicks(self):
-		self.clicks += 1
+    @staticmethod
+    def help():
+        return "Help: id is the Advertiser id, name is the Advertiser name, clicks and views are the number of " \
+               "clicks and views of this Advertisers ads. The field total clicks is the sum of all Advertisers clicks."
 
-	def describeMe(self):
-		return "Advertiser: Class containing advertiser info and functions needed for each advertiser"
+    @staticmethod
+    def get_total_clicks():
+        return Advertiser.objects.aggregate(Sum('price'))
 
+    def inc_clicks(self):
+        self.clicks += 1
+
+    def describe_me(self):
+        return "Advertiser: Class containing advertiser info and functions needed for each advertiser"
 
 
 class Ad(BaseAdvertising, models.Model):
-	"""docstring for Ad"""
-	title =  models.CharField(max_length = 100)
-	imgURL =  models.CharField(max_length = 100)
-	link =  models.CharField(max_length = 100)
-	theAdvertiser = models.ForeignKey(Advertiser, on_delete = models.CASCADE)
+    """docstring for Ad"""
+    title = models.CharField(max_length=100)
+    imgURL = models.CharField(max_length=100)
+    link = models.CharField(max_length=100)
+    theAdvertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
 
-	def getTitle(self):
-		return self.title
-	def setTitle(self, title):
-		self.title = title
+    def __str__(self):
+        return self.title
 
-	def incClicks(self):
-		self.clicks += 1
-		self.theAdvertiser.incClicks()
+    def get_title(self):
+        return self.title
 
-	def describeMe(self):
-		return "Ad: Class containing ad info and functions needed for each ad"
+    def set_title(self, title):
+        self.title = title
 
+    def inc_clicks(self):
+        self.clicks += 1
+        self.theAdvertiser.inc_clicks()
+
+    def describe_me(self):
+        return "Ad: Class containing ad info and functions needed for each ad"
