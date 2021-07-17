@@ -10,13 +10,11 @@ ad2 = Ad.objects.create(title="title2", imgURL="img-url2", link="link2", theAdve
 
 class HomeView(generic.ListView):
     template_name = 'advertiser_management/ads.html'
-    context_object_name = 'advertiser_list'
+    context_object_name = 'advertisers'
 
+    # queryset = Advertiser.objects.all()
     def get_queryset(self):
         """Return Advertisers."""
         for advertiser in Advertiser.objects.all():
             advertiser.inc_views()
         return Advertiser.objects.all()
-
-
-

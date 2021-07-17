@@ -15,15 +15,17 @@ class BaseAdvertising(models.Model):
 
     def inc_clicks(self):
         self.clicks += 1
+        self.save()
 
     def inc_views(self):
         self.views += 1
+        self.save()
 
     def describe_me(self):
         return "BaseAdvertising: Class for basic functions needed for advertising"
 
 
-class Advertiser(BaseAdvertising, models.Model):
+class Advertiser(BaseAdvertising):
     """docstring for Advertiser"""
     name = models.CharField(max_length=100)
 
@@ -45,8 +47,6 @@ class Advertiser(BaseAdvertising, models.Model):
     def get_total_clicks():
         return Advertiser.objects.aggregate(Sum('price'))
 
-    def inc_clicks(self):
-        self.clicks += 1
 
     def describe_me(self):
         return "Advertiser: Class containing advertiser info and functions needed for each advertiser"
@@ -71,6 +71,7 @@ class Ad(BaseAdvertising, models.Model):
     def inc_clicks(self):
         self.clicks += 1
         self.theAdvertiser.inc_clicks()
+        self.save()
 
     def describe_me(self):
         return "Ad: Class containing ad info and functions needed for each ad"
