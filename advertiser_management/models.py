@@ -3,8 +3,8 @@ from django.db.models import Sum
 
 class BaseAdvertising(models.Model):
 	"""docstring for BaseAdvertising"""
-	clicks = models.IntegerField()
-	views = models.IntegerField()	
+	clicks = models.IntegerField(default = 0)
+	views = models.IntegerField(default = 0)	
 
 	# def getId():
 	# 	return self._id
