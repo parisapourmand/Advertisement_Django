@@ -5,22 +5,6 @@ from django.urls import reverse
 
 class BaseAdvertising(models.Model):
     """docstring for BaseAdvertising"""
-    clicks = models.IntegerField(default=0)
-    views = models.IntegerField(default=0)
-
-    def get_clicks(self):
-        return self.clicks
-
-    def get_views(self):
-        return self.views
-
-    def inc_clicks(self):
-        self.clicks += 1
-        self.save()
-
-    def inc_views(self):
-        self.views += 1
-        self.save()
 
     def describe_me(self):
         return "BaseAdvertising: Class for basic functions needed for advertising"
@@ -71,10 +55,15 @@ class Ad(BaseAdvertising, models.Model):
     def set_title(self, title):
         self.title = title
 
-    def inc_clicks(self):
-        self.clicks += 1
-        self.theAdvertiser.inc_clicks()
-        self.save()
-
     def describe_me(self):
         return "Ad: Class containing ad info and functions needed for each ad"
+
+
+class Click(models.Model):
+    """docstring for Click"""
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
+
+
+class View(models.Model):
+    """docstring for View"""
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE)

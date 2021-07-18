@@ -1,11 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from django.http import HttpResponseRedirect
 
-from advertiser_management.models import BaseAdvertising, Advertiser, Ad
-
-
-# from .forms import CreateAdForm
+from advertiser_management.models import *
 
 
 class HomeView(generic.ListView):
@@ -15,8 +11,8 @@ class HomeView(generic.ListView):
     # queryset = Advertiser.objects.all()
     def get_queryset(self):
         """Return Advertisers."""
-        for advertiser in Advertiser.objects.all():
-            advertiser.inc_views()
+        for ad in Ad.objects.all():
+            View.objects.create(ad=ad)
         return Advertiser.objects.all()
 
 
@@ -27,7 +23,7 @@ class ClickRedirectView(generic.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         ad = get_object_or_404(Ad, pk=kwargs['pk'])
-        ad.inc_clicks()
+        Click.objects.create(ad=ad)
         # return ad.link
         return 'https://www.google.com/'
 
