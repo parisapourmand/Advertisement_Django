@@ -60,7 +60,7 @@ class Ad(BaseAdvertising, models.Model):
     theAdvertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
-        return reverse('ad-detail', kwargs={'pk': self.pk})
+        return ''
 
     def __str__(self):
         return self.title
