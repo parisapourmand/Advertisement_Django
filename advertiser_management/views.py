@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
+
 from advertiser_management.models import BaseAdvertising, Advertiser, Ad
+# from .forms import CreateAdForm
 
 
 class HomeView(generic.ListView):
@@ -23,4 +25,9 @@ class ClickRedirectView(generic.RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         ad = get_object_or_404(Ad, pk=kwargs['pk'])
         ad.inc_clicks()
-        return ad.link
+        return 'https://www.google.com/'
+
+
+class CreateAdView(generic.CreateView):
+    model = Ad
+    fields = ['title', 'imgURL', 'link', 'theAdvertiser']

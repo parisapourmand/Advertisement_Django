@@ -4,6 +4,7 @@ from . import views
 
 app_name = 'advertiser_management'
 urlpatterns = [
-    path('home/', views.HomeView.as_view(), name='advertiserManagement-home'),
-    path('counter/<int:pk>/', views.ClickRedirectView.as_view(), name='advertiserManagement-click'),
+    path('ad/create/', views.CreateAdView.as_view(), name='advertiserManagement-ad-create'),
+    path('click/<int:pk>/', views.ClickRedirectView.as_view(), name='advertiserManagement-click'),
+    path('', views.HomeView.as_view(), name='advertiserManagement-home'),
 ]

@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum
+from django.urls import reverse
 
 
 class BaseAdvertising(models.Model):
@@ -47,7 +48,6 @@ class Advertiser(BaseAdvertising):
     def get_total_clicks():
         return Advertiser.objects.aggregate(Sum('price'))
 
-
     def describe_me(self):
         return "Advertiser: Class containing advertiser info and functions needed for each advertiser"
 
@@ -58,6 +58,9 @@ class Ad(BaseAdvertising, models.Model):
     imgURL = models.CharField(max_length=100)
     link = models.CharField(max_length=100)
     theAdvertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('ad-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.title
