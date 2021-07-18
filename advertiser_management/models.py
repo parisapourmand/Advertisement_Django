@@ -61,9 +61,13 @@ class Ad(BaseAdvertising, models.Model):
 
 class Click(models.Model):
     """docstring for Click"""
+    datetime = models.DateTimeField(auto_now=True)
+    ipaddress = models.GenericIPAddressField(default='000.000.0.0')
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
 
 
 class View(models.Model):
     """docstring for View"""
+    datetime = models.DateTimeField(auto_now=True)
+    ipaddress = models.GenericIPAddressField(default='000.000.0.0')
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
