@@ -42,6 +42,8 @@ class Ad(BaseAdvertising, models.Model):
     imgURL = models.CharField(max_length=100)
     link = models.CharField(max_length=100)
     theAdvertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
+    approve = models.BooleanField(default=False)
+
 
     def get_absolute_url(self):
         return ''
