@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Advertiser)
+# admin.site.register(Advertiser)
 # admin.site.register(Ad)
 admin.site.register(Click)
 admin.site.register(View)
@@ -12,3 +12,8 @@ class AdAdmin(admin.ModelAdmin):
     fields = ('title', 'approve')
     list_filter = ('approve',)
     search_fields = ('title',)
+
+
+@admin.register(Advertiser)
+class AdvertiserAdmin(admin.ModelAdmin):
+    search_fields = ('name',)

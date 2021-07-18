@@ -41,3 +41,10 @@ class CreateAdView(generic.CreateView):
     #     if Ad.objects.filter(theAdvertiser=self.user, title=title).exists():
     #         raise form.ValidationError("You have already have an ad with same title.")
     #     return title
+
+
+# class InfoView(generic.CreateView):
+#     model = Ad
+#     fields = [all()]
+#     Ad.objects.order_by('click__datetime')
+#     Ad.objects.order_by('view__datetime')
