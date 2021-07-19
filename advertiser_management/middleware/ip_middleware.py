@@ -3,8 +3,12 @@ class IPMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        response = self.get_response(request)
 
         ip = request.META.get('REMOTE_ADDR')
+
+        response = self.get_response(request)
+
+        print("**********response*********")
+        print(response)
 
         return response

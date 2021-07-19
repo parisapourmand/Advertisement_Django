@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
+from django.db.models import Count
+import itertools
+from datetime import datetime
 
 from advertiser_management.models import *
 
@@ -36,15 +39,18 @@ class CreateAdView(generic.CreateView):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
 
-    # def clean_title(self):
-    #     title = self.cleaned_data['title']
-    #     if Ad.objects.filter(theAdvertiser=self.user, title=title).exists():
-    #         raise form.ValidationError("You have already have an ad with same title.")
-    #     return title
+
+def date_hour(timestamp):
+    return datetime.fromtimestamp(timestamp).strftime("%x %H")
 
 
-# class InfoView(generic.CreateView):
-#     model = Ad
-#     fields = [all()]
-#     Ad.objects.order_by('click__datetime')
-#     Ad.objects.order_by('view__datetime')
+class InfoView(generic.ListView):
+
+    def get_queryset(self):
+        objs = Ad.objects.all.order_by("click__datetime")
+        groups = itertools.groupby(objs, lambda x: date_hour(x.Timestamp))
+        for group, matches in groups:
+            print(group, "TTL:", Count(1 for _ in matches))
+
+        # result = Ad.objects.annotate(the_count=Count('click__datetime'))
+        # return result
