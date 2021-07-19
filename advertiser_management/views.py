@@ -15,7 +15,7 @@ class HomeView(generic.ListView):
     def get_queryset(self):
         """Return Advertisers."""
         for ad in Ad.objects.all():
-            View.objects.create(ad=ad, ipaddress=self.request.META.get('REMOTE_ADDR'))
+            View.objects.create(ad=ad, ipaddress=self.request.ip)
         return Advertiser.objects.all()
 
 
@@ -26,7 +26,7 @@ class ClickRedirectView(generic.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         ad = get_object_or_404(Ad, pk=kwargs['pk'])
-        Click.objects.create(ad=ad, ipaddress=self.request.META.get('REMOTE_ADDR'))
+        Click.objects.create(ad=ad, ipaddress=self.request.ip)
         # return ad.link
         return 'https://www.google.com/'
 
