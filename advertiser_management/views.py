@@ -47,10 +47,12 @@ def date_hour(timestamp):
 class InfoView(generic.ListView):
 
     def get_queryset(self):
-        objs = Ad.objects.all.order_by("click__datetime")
-        groups = itertools.groupby(objs, lambda x: date_hour(x.Timestamp))
+        objs = Ad.objects.all().order_by("click__datetime")
+        groups = itertools.groupby(objs, lambda x: date_hour(x.click__datetime))
         for group, matches in groups:
             print(group, "TTL:", Count(1 for _ in matches))
-
+        # for group, matches in groups:
+        #     print(group, "TTL:", Count(1 for _ in matches))
+        #
         # result = Ad.objects.annotate(the_count=Count('click__datetime'))
         # return result
