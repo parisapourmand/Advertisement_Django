@@ -3,6 +3,7 @@ from django.db.models import Sum
 from datetime import datetime, timedelta
 from statistics import mean
 
+
 class BaseAdvertising(models.Model):
     """docstring for BaseAdvertising"""
 
@@ -16,12 +17,6 @@ class Advertiser(BaseAdvertising):
 
     def __str__(self):
         return self.name
-
-    def get_name(self):
-        return self.name
-
-    def set_name(self, name):
-        self.name = name
 
     @staticmethod
     def help():
@@ -50,19 +45,14 @@ class Ad(BaseAdvertising, models.Model):
     def __str__(self):
         return self.title
 
-    def get_title(self):
-        return self.title
-
-    def set_title(self, title):
-        self.title = title
-
     def describe_me(self):
         return "Ad: Class containing ad info and functions needed for each ad"
 
     def get_hourly_info(self, starting_point, ending_point):
         hourly_clicks = self.click_set.filter(datetime__gte=starting_point, datetime__lt=ending_point).count()
         hourly_views = self.view_set.filter(datetime__gte=starting_point, datetime__lt=ending_point).count()
-        hourly_info = {'datetime': starting_point.strftime("%Y-%m-%d %H:%M",), 'clicks': hourly_clicks, 'views': hourly_views}
+        hourly_info = {'datetime': starting_point.strftime("%Y-%m-%d %H:%M", ), 'clicks': hourly_clicks,
+                       'views': hourly_views}
         return hourly_info
 
     def get_total_hourly_info(self):
@@ -92,7 +82,8 @@ class Ad(BaseAdvertising, models.Model):
 
     def get_click_view_rate(self):
         info_list = self.get_total_hourly_info()
-        result = {info['datetime']: round(info['clicks']/info['views'], 2) for info in info_list if info['views'] != 0}
+        result = {info['datetime']: round(info['clicks'] / info['views'], 2) for info in info_list if
+                  info['views'] != 0}
         result_sorted = dict(sorted(result.items(), key=lambda item: item[1], reverse=True))
         return result_sorted
 
@@ -100,8 +91,8 @@ class Ad(BaseAdvertising, models.Model):
         differences = []
         for v in self.view_set.all():
             for c in self.click_set.all():
-                if v.ipaddress == c.ipaddress:
-                    differences.append(abs((c.datetime-v.datetime).total_seconds() / 60))
+                if v.ipaddress == c.ipaddress and c.datetime > v.datetime:
+                    differences.append((c.datetime - v.datetime).total_seconds() / 60)
         average_dif = mean(differences)
         return average_dif
 
@@ -109,12 +100,12 @@ class Ad(BaseAdvertising, models.Model):
 class Click(models.Model):
     """docstring for Click"""
     datetime = models.DateTimeField(auto_now=True)
-    ipaddress = models.GenericIPAddressField(default='000.000.0.0')
+    ipaddress = models.GenericIPAddressField(null=True, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
 
 
 class View(models.Model):
     """docstring for View"""
     datetime = models.DateTimeField(auto_now=True)
-    ipaddress = models.GenericIPAddressField(default='000.000.0.0')
+    ipaddress = models.GenericIPAddressField(null=True, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)

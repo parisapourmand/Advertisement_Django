@@ -30,8 +30,7 @@ class ClickRedirectView(generic.RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         ad = get_object_or_404(Ad, pk=kwargs['pk'])
         Click.objects.create(ad=ad, ipaddress=self.request.ip)
-        # return ad.link
-        return 'https://www.google.com/'
+        return ad.link
 
 
 class CreateAdView(generic.CreateView):
@@ -46,8 +45,6 @@ class CreateAdView(generic.CreateView):
 class InfoFormView(generic.FormView):
     template_name = 'advertiser_management/info.html'
     form_class = InfoForm
-
-    # success_url = '/thanks/'
 
     def form_valid(self, form):
         info = form.get_info()
