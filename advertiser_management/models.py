@@ -90,6 +90,15 @@ class Ad(BaseAdvertising, models.Model):
 
         return hourly_info_list
 
+    def get_click_view_rate(self):
+        info_list = self.get_total_hourly_info()
+        result = {info['datetime']: round(info['clicks']/info['views'], 2) for info in info_list if info['views'] != 0}
+        result_sorted = dict(sorted(result.items(), key=lambda item: item[1], reverse=True))
+        return result_sorted
+
+    def get_avg_difference(self):
+        pass
+
 
 class Click(models.Model):
     """docstring for Click"""
