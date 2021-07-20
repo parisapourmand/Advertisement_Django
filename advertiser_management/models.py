@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Sum
-from django.urls import reverse
+from datetime import datetime, timedelta
 
 
 class BaseAdvertising(models.Model):
@@ -44,7 +44,6 @@ class Ad(BaseAdvertising, models.Model):
     theAdvertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
     approve = models.BooleanField(default=False)
 
-
     def get_absolute_url(self):
         return ''
 
@@ -59,6 +58,37 @@ class Ad(BaseAdvertising, models.Model):
 
     def describe_me(self):
         return "Ad: Class containing ad info and functions needed for each ad"
+
+    def get_hourly_info(self, starting_point, ending_point):
+        hourly_clicks = self.click_set.filter(datetime__gte=starting_point, datetime__lt=ending_point).count()
+        hourly_views = self.view_set.filter(datetime__gte=starting_point, datetime__lt=ending_point).count()
+        hourly_info = {'datetime': starting_point.strftime("%Y-%m-%d %H:%M",), 'clicks': hourly_clicks, 'views': hourly_views}
+        return hourly_info
+
+    def get_total_hourly_info(self):
+        total_clicks = self.click_set.count()
+        total_views = self.view_set.count()
+        hourly_info_list = []
+        click_count = 0
+        view_count = 0
+        ending_point = datetime.now()
+
+        starting_point = ending_point.replace(minute=0, second=0, microsecond=0)
+        hourly_info = self.get_hourly_info(starting_point, ending_point)
+        hourly_info_list.append(hourly_info)
+        click_count += hourly_info['clicks']
+        view_count += hourly_info['views']
+        ending_point = starting_point
+
+        while click_count in range(total_clicks) and view_count in range(total_views):
+            starting_point = ending_point - timedelta(hours=1)
+            hourly_info = self.get_hourly_info(starting_point, ending_point)
+            hourly_info_list.append(hourly_info)
+            click_count += hourly_info['clicks']
+            view_count += hourly_info['views']
+            ending_point = starting_point
+
+        return hourly_info_list
 
 
 class Click(models.Model):

@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.db.models import Count
-import itertools
 from datetime import datetime
 
 from advertiser_management.models import *
@@ -40,19 +39,5 @@ class CreateAdView(generic.CreateView):
         return super().form_valid(form)
 
 
-def date_hour(timestamp):
-    return datetime.fromtimestamp(timestamp).strftime("%x %H")
-
-
-class InfoView(generic.ListView):
-
-    def get_queryset(self):
-        objs = Ad.objects.all().order_by("click__datetime")
-        groups = itertools.groupby(objs, lambda x: date_hour(x.click__datetime))
-        for group, matches in groups:
-            print(group, "TTL:", Count(1 for _ in matches))
-        # for group, matches in groups:
-        #     print(group, "TTL:", Count(1 for _ in matches))
-        #
-        # result = Ad.objects.annotate(the_count=Count('click__datetime'))
-        # return result
+class InfoView(generic.FormView):
+    pass
