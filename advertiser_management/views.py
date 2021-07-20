@@ -1,25 +1,33 @@
-import json
-
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from advertiser_management.forms import InfoForm
 from django.http import HttpResponse
-from django.db.models import Count
-from datetime import datetime
+
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 from advertiser_management.models import *
+from advertiser_management.serializer import *
 
 
-class HomeView(generic.ListView):
-    template_name = 'advertiser_management/ads.html'
-    context_object_name = 'advertisers'
+class HomeView(APIView):
+    pass
+    #     for ad in Ad.objects.all():
+    #         View.objects.create(ad=ad, ipaddress=self.request.ip)
 
-    # queryset = Advertiser.objects.all()
-    def get_queryset(self):
-        """Return Advertisers."""
-        for ad in Ad.objects.all():
-            View.objects.create(ad=ad, ipaddress=self.request.ip)
-        return Advertiser.objects.all()
+    # def get(self, request, format=None):
+    #     advertisers = Advertiser.objects.all()
+    #     serializer = AdvertiserSerializer(advertisers, many=True)
+    #     return Response(serializer.data)
+    #
+    # def post(self, request, format=None):
+    #     serializer = AdvertiserSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ClickRedirectView(generic.RedirectView):
