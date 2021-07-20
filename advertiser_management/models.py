@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Sum
 from datetime import datetime, timedelta
-
+from statistics import mean
 
 class BaseAdvertising(models.Model):
     """docstring for BaseAdvertising"""
@@ -97,7 +97,13 @@ class Ad(BaseAdvertising, models.Model):
         return result_sorted
 
     def get_avg_difference(self):
-        pass
+        differences = []
+        for v in self.view_set.all():
+            for c in self.click_set.all():
+                if v.ipaddress == c.ipaddress:
+                    differences.append(abs((c.datetime-v.datetime).total_seconds() / 60))
+        average_dif = mean(differences)
+        return average_dif
 
 
 class Click(models.Model):
