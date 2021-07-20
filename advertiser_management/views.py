@@ -1,5 +1,9 @@
+import json
+
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
+from advertiser_management.forms import InfoForm
+from django.http import HttpResponse
 from django.db.models import Count
 from datetime import datetime
 
@@ -39,5 +43,12 @@ class CreateAdView(generic.CreateView):
         return super().form_valid(form)
 
 
-class InfoView(generic.FormView):
-    pass
+class InfoFormView(generic.FormView):
+    template_name = 'advertiser_management/info.html'
+    form_class = InfoForm
+
+    # success_url = '/thanks/'
+
+    def form_valid(self, form):
+        info = form.get_info()
+        return HttpResponse(info)

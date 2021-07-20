@@ -1,20 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          crossorigin="anonymous">
-    <title>Info</title>
-</head>
-<body>
-<div class="container" dir="rtl">
-    {% for info in ads_info %}
-        <div class="card mt-2 p-2">
-            <h5 >{{ info.datetime }}</h5>
-            <h5 >{{ info.clicks }}</h5>
-            <h5 >{{ info.views }}</h5>
-        </div>
-    {% endfor %}
-</div>
-</body>
-</html>
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Send message">
+</form>
+
