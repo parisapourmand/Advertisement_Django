@@ -1,18 +1,15 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from advertiser_management.serializers import *
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
 
 
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for viewing and editing user instances.
+    """
     serializer_class = UserSerializer
-
-
-class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
 
 
 class AdList(generics.ListCreateAPIView):

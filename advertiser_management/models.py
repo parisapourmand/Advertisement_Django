@@ -2,11 +2,8 @@ from django.db import models
 from django.db.models import Sum
 from datetime import datetime, timedelta
 from statistics import mean
-
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters.html import HtmlFormatter
-from pygments import highlight
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
 
 class BaseAdvertising(models.Model):
