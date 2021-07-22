@@ -38,8 +38,7 @@ class Advertiser(BaseAdvertising):
 
 class Ad(BaseAdvertising, models.Model):
     """docstring for Ad"""
-    owner = models.ForeignKey('auth.User', related_name='ads', on_delete=models.CASCADE, null=True,blank=True)
-    highlighted = models.TextField(null=True,blank=True)
+    owner = models.ForeignKey('auth.User', related_name='ads', on_delete=models.CASCADE, null=True, blank=True)
 
     title = models.CharField(max_length=100)
     imgURL = models.CharField(max_length=100)
@@ -103,19 +102,6 @@ class Ad(BaseAdvertising, models.Model):
                     differences.append((c.datetime - v.datetime).total_seconds() / 60)
         average_dif = mean(differences)
         return average_dif
-
-    def save(self, *args, **kwargs):
-        """
-        Use the `pygments` library to create a highlighted HTML
-        representation of the code ad.
-        """
-        lexer = get_lexer_by_name(self.title)
-        linenos = 'table' if self.linenos else False
-        options = {'title': self.title} if self.title else {}
-        formatter = HtmlFormatter(style=self.style, linenos=linenos,
-                                  full=True, **options)
-        self.highlighted = highlight(self.code, lexer, formatter)
-        super(Ad, self).save(*args, **kwargs)
 
 
 class Click(models.Model):
