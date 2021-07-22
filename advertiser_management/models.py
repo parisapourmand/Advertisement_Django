@@ -117,6 +117,7 @@ class Ad(BaseAdvertising, models.Model):
         self.highlighted = highlight(self.code, lexer, formatter)
         super(Ad, self).save(*args, **kwargs)
 
+
 class Click(models.Model):
     """docstring for Click"""
 
