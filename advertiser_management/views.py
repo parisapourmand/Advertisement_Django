@@ -7,53 +7,27 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
 
-from advertiser_management.models import *
-from advertiser_management.serializer import *
-
-
-class HomeView(APIView):
-    pass
-    #     for ad in Ad.objects.all():
-    #         View.objects.create(ad=ad, ipaddress=self.request.ip)
-
-    # def get(self, request, format=None):
-    #     advertisers = Advertiser.objects.all()
-    #     serializer = AdvertiserSerializer(advertisers, many=True)
-    #     return Response(serializer.data)
-    #
-    # def post(self, request, format=None):
-    #     serializer = AdvertiserSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+from advertiser_management.serializers import *
 
 
-class ClickRedirectView(generic.RedirectView):
-    permanent = False
-    query_string = True
-    pattern_name = 'ad-click'
-
-    def get_redirect_url(self, *args, **kwargs):
-        ad = get_object_or_404(Ad, pk=kwargs['pk'])
-        Click.objects.create(ad=ad, ipaddress=self.request.ip)
-        return ad.link
+class HomeView(generics.ListCreateAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
 
 
-class CreateAdView(generic.CreateView):
-    model = Ad
-    fields = ['title', 'imgURL', 'link', 'theAdvertiser']
+# class ClickRedirectView(generic.RedirectView):
+#     permanent = False
+#     query_string = True
+#     pattern_name = 'ad-click'
+#
+#     def get_redirect_url(self, *args, **kwargs):
+#         ad = get_object_or_404(Ad, pk=kwargs['pk'])
+#         Click.objects.create(ad=ad, ipaddress=self.request.ip)
+#         return ad.link
 
-    def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        return super().form_valid(form)
 
-
-class InfoFormView(generic.FormView):
-    template_name = 'advertiser_management/info.html'
-    form_class = InfoForm
-
-    def form_valid(self, form):
-        info = form.get_info()
-        return HttpResponse(info)
+class InfoFormView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer

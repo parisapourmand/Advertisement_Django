@@ -1,4 +1,4 @@
-#!/home/parisa/Documents/Intenship/Yektanet/venv/bin/python
+#!/Users/parisapourmand/Documents/Advertisement_Django/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

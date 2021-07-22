@@ -1,4 +1,4 @@
-#!/home/parisa/Documents/Intenship/Yektanet/venv/bin/python
+#!/Users/parisapourmand/Documents/Advertisement_Django/venv/bin/python
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
