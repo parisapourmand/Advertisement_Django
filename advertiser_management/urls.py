@@ -9,6 +9,8 @@ urlpatterns = [
 
     path('', views.AdList.as_view(), name='advertiserManagement-home'),
     path('<int:pk>/', views.AdDetail.as_view(), name='advertiserManagement-info'),
+    path('users/', views.UserList.as_view()),
+    path('users/<int:pk>/', views.UserDetail.as_view()),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
 
