@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     ads = serializers.PrimaryKeyRelatedField(many=True, queryset=Ad.objects.all())
+    # advertisers = serializers.PrimaryKeyRelatedField(many=True, queryset=Advertiser.objects.all())
 
     class Meta:
         model = User
@@ -17,11 +18,14 @@ class AdvertiserSerializer(serializers.ModelSerializer):
         model = Advertiser
         fields = '__all__'
 
+
 class AdSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
         model = Ad
-        fields = '__all__'
-        owner = serializers.ReadOnlyField(source='owner.username')
+        # fields = '__all__'
+        fields = ['owner', 'title', 'imgURL', 'link', 'theAdvertiser', 'approve']
 
 
 class ClickSerializer(serializers.ModelSerializer):
