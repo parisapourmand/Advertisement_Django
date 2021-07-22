@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
 from advertiser_management.models import *
+from django.contrib.auth.models import User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    ads = serializers.PrimaryKeyRelatedField(many=True, queryset=Ad.objects.all())
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'ads']
 
 
 class AdvertiserSerializer(serializers.ModelSerializer):
@@ -8,11 +17,11 @@ class AdvertiserSerializer(serializers.ModelSerializer):
         model = Advertiser
         fields = '__all__'
 
-
 class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = '__all__'
+        owner = serializers.ReadOnlyField(source='owner.username')
 
 
 class ClickSerializer(serializers.ModelSerializer):

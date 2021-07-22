@@ -3,10 +3,9 @@ from django.db.models import Sum
 from datetime import datetime, timedelta
 from statistics import mean
 
-# from Yektanet import settings
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
-# from rest_framework.authtoken.models import Token
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
+from pygments import highlight
 
 
 class BaseAdvertising(models.Model):
@@ -19,6 +18,9 @@ class BaseAdvertising(models.Model):
 class Advertiser(BaseAdvertising):
     """docstring for Advertiser"""
     name = models.CharField(max_length=100)
+
+    # owner = models.ForeignKey('auth.User', related_name='advertisers', on_delete=models.CASCADE, null=True, blank=True)
+    # highlighted = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -35,9 +37,25 @@ class Advertiser(BaseAdvertising):
     def describe_me(self):
         return "Advertiser: Class containing advertiser info and functions needed for each advertiser"
 
+    # def save(self, *args, **kwargs):
+    #     """
+    #     Use the `pygments` library to create a highlighted HTML
+    #     representation of the code advertiser.
+    #     """
+    #     lexer = get_lexer_by_name(self.name)
+    #     linenos = 'table' if self.linenos else False
+    #     options = {'title': self.title} if self.title else {}
+    #     formatter = HtmlFormatter(style=self.style, linenos=linenos,
+    #                               full=True, **options)
+    #     self.highlighted = highlight(self.code, lexer, formatter)
+    #     super(Advertiser, self).save(*args, **kwargs)
+
 
 class Ad(BaseAdvertising, models.Model):
     """docstring for Ad"""
+    owner = models.ForeignKey('auth.User', related_name='ads', on_delete=models.CASCADE, null=True, blank=True)
+    highlighted = models.TextField(null=True, blank=True)
+
     title = models.CharField(max_length=100)
     imgURL = models.CharField(max_length=100)
     link = models.CharField(max_length=100)
@@ -101,22 +119,61 @@ class Ad(BaseAdvertising, models.Model):
         average_dif = mean(differences)
         return average_dif
 
+    def save(self, *args, **kwargs):
+        """
+        Use the `pygments` library to create a highlighted HTML
+        representation of the code ad.
+        """
+        lexer = get_lexer_by_name(self.title)
+        linenos = 'table' if self.linenos else False
+        options = {'title': self.title} if self.title else {}
+        formatter = HtmlFormatter(style=self.style, linenos=linenos,
+                                  full=True, **options)
+        self.highlighted = highlight(self.code, lexer, formatter)
+        super(Ad, self).save(*args, **kwargs)
+
 
 class Click(models.Model):
     """docstring for Click"""
+    # owner = models.ForeignKey('auth.User', related_name='clicks', on_delete=models.CASCADE)
+    # highlighted = models.TextField()
+
     datetime = models.DateTimeField(auto_now=True)
     ipaddress = models.GenericIPAddressField(null=True, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
+
+    # def save(self, *args, **kwargs):
+    #     """
+    #     Use the `pygments` library to create a highlighted HTML
+    #     representation of the code click.
+    #     """
+    #     lexer = get_lexer_by_name(self.language)
+    #     linenos = 'table' if self.linenos else False
+    #     options = {'title': self.title} if self.title else {}
+    #     formatter = HtmlFormatter(style=self.style, linenos=linenos,
+    #                               full=True, **options)
+    #     self.highlighted = highlight(self.code, lexer, formatter)
+    #     super(Click, self).save(*args, **kwargs)
 
 
 class View(models.Model):
     """docstring for View"""
+    # owner = models.ForeignKey('auth.User', related_name='views', on_delete=models.CASCADE)
+    # highlighted = models.TextField()
+
     datetime = models.DateTimeField(auto_now=True)
     ipaddress = models.GenericIPAddressField(null=True, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
 
-
-# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-# def create_auth_token(sender, instance=None, created=False, **kwargs):
-#     if created:
-#         Token.objects.create()
+    # def save(self, *args, **kwargs):
+    #     """
+    #     Use the `pygments` library to create a highlighted HTML
+    #     representation of the code view.
+    #     """
+    #     lexer = get_lexer_by_name(self.language)
+    #     linenos = 'table' if self.linenos else False
+    #     options = {'title': self.title} if self.title else {}
+    #     formatter = HtmlFormatter(style=self.style, linenos=linenos,
+    #                               full=True, **options)
+    #     self.highlighted = highlight(self.code, lexer, formatter)
+    #     super(View, self).save(*args, **kwargs)
