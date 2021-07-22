@@ -6,13 +6,16 @@ from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     ads = serializers.PrimaryKeyRelatedField(many=True, queryset=Ad.objects.all())
+    advertisers = serializers.PrimaryKeyRelatedField(many=True, queryset=Advertiser.objects.all())
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'ads']
+        fields = ['id', 'username', 'ads', 'advertisers']
 
 
 class AdvertiserSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
         model = Advertiser
         fields = '__all__'

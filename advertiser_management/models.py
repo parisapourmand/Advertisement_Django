@@ -18,6 +18,8 @@ class BaseAdvertising(models.Model):
 
 class Advertiser(BaseAdvertising):
     """docstring for Advertiser"""
+    owner = models.ForeignKey('auth.User', related_name='advertisers', on_delete=models.CASCADE, null=True, blank=True)
+
     name = models.CharField(max_length=100)
 
     def __str__(self):

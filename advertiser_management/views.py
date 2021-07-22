@@ -30,3 +30,20 @@ class AdDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
+
+
+class AdvertiserList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Advertiser.objects.all()
+    serializer_class = AdvertiserSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class AdvertiserDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Advertiser.objects.all()
+    serializer_class = AdvertiserSerializer
