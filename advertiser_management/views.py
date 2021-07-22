@@ -1,43 +1,22 @@
-from django.shortcuts import render, get_object_or_404
-from django.views import generic
-from advertiser_management.forms import InfoForm
-from django.http import HttpResponse
-
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from rest_framework import generics
 
-from django.contrib.auth.models import User
-from rest_framework import permissions
-
 from advertiser_management.serializers import *
-
-
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 class AdList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
 
 
 class AdDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
 
 # class ClickRedirectView(generic.RedirectView):
 #     permanent = False
