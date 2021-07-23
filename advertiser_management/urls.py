@@ -1,16 +1,17 @@
 from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.authtoken.views import obtain_auth_token
-from . import views
+from advertiser_management.views import *
+from advertiser_management.views import UserViewSet
+from rest_framework.routers import DefaultRouter
 
 app_name = 'advertiser_management'
-urlpatterns = [
-    path('ads', views.AdList.as_view(), name='advertiserManagement-adList'),
-    path('ads/<int:pk>/', views.AdDetail.as_view(), name='advertiserManagement-adiInfo'),
-    path('advertisers', views.AdvertiserList.as_view(), name='advertiserManagement-advertiserList'),
-    path('advertisers/<int:pk>/', views.AdvertiserDetail.as_view(), name='advertiserManagement-advertiserInfo'),
-    path('users/', views.UserViewSet.as_view(), name='advertiserManagement-users'),
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
+router.register(r'ads', AdViewSet, basename='ad')
+router.register(r'advertisers', AdvertiserViewSet, basename='advertiser')
+urlpatterns = router.urls
+
+urlpatterns += [
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)

@@ -12,9 +12,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
 
-class AdList(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
-
+class AdViewSet(viewsets.ModelViewSet):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
 
@@ -22,25 +20,9 @@ class AdList(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class AdDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
-
-    queryset = Ad.objects.all()
-    serializer_class = AdSerializer
-
-
-class AdvertiserList(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
-
+class AdvertiserViewSet(viewsets.ModelViewSet):
     queryset = Advertiser.objects.all()
     serializer_class = AdvertiserSerializer
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-
-
-class AdvertiserDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
-
-    queryset = Advertiser.objects.all()
-    serializer_class = AdvertiserSerializer

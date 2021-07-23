@@ -26,8 +26,7 @@ class AdSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ad
-        # fields = '__all__'
-        fields = ['owner', 'title', 'imgURL', 'link', 'theAdvertiser', 'approve']
+        fields = '__all__'
 
 
 class ClickSerializer(serializers.ModelSerializer):
