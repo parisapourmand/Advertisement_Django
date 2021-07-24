@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from advertiser_management.models import *
 
-app = Celery()
+app = Celery('tasks', broker='amqp://localhost')
 
 HOUR = 60 * 60
 DAY = 60 * 60 * 24
