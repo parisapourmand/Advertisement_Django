@@ -1,24 +1,8 @@
-from celery import Celery
-from celery.schedules import crontab
-from datetime import datetime, timedelta
-
+from celery import shared_task
 from advertiser_management.models import *
 
-app = Celery('tasks', broker='amqp://localhost')
 
-HOUR = 60 * 60
-DAY = 60 * 60 * 24
-
-
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    # hourly
-    sender.add_periodic_task(HOUR, get_hourly_click_view(), name='add every hour')
-    # daily
-    sender.add_periodic_task(DAY, get_daily_click_view(), name='add every day')
-
-
-@app.task
+@shared_task(queue='counting')
 def get_hourly_click_view(end_datetime=None):
     ending_point = end_datetime if end_datetime else datetime.now()
     ending_point = ending_point.replace(minute=0, second=0, microsecond=0)
@@ -28,7 +12,7 @@ def get_hourly_click_view(end_datetime=None):
     HourlyClickViewInfo.objects.create(click_num=click_num, view_num=view_num, datetime=starting_point)
 
 
-@app.task
+@shared_task(queue='counting')
 def get_daily_click_view(end_datetime=None):
     ending_point = end_datetime if end_datetime else datetime.now()
     ending_point = ending_point.replace(minute=0, second=0, microsecond=0)
