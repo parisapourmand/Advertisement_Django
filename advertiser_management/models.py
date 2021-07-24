@@ -105,7 +105,6 @@ class Ad(BaseAdvertising, models.Model):
 
 class Click(models.Model):
     """docstring for Click"""
-
     datetime = models.DateTimeField(auto_now=True)
     ipaddress = models.GenericIPAddressField(null=True, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
@@ -113,7 +112,21 @@ class Click(models.Model):
 
 class View(models.Model):
     """docstring for View"""
-
     datetime = models.DateTimeField(auto_now=True)
     ipaddress = models.GenericIPAddressField(null=True, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
+
+
+class ClickViewInfo(models.Model):
+    """docstring for HourlyInfo"""
+    click_num = models.IntegerField()
+    view_num = models.IntegerField()
+    datetime = models.DateTimeField(auto_now=True)
+
+
+class HourlyClickViewInfo(ClickViewInfo):
+    """docstring for HourlyInfo"""
+
+
+class DailyClickViewInfo(ClickViewInfo):
+    """docstring for DailyInfo"""
